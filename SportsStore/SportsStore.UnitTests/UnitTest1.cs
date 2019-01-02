@@ -327,7 +327,7 @@ namespace SportsStore.UnitTests
             //创建Cart
             Cart cart = new Cart();
             //创建控制器
-            CartController target = new CartController(mock.Object);
+            CartController target = new CartController(mock.Object,null);
 
             //Action
             //对cart添加一个产品
@@ -351,7 +351,7 @@ namespace SportsStore.UnitTests
             //创建Cart
             Cart cart = new Cart();
             //创建控制器
-            CartController target = new CartController(mock.Object);
+            CartController target = new CartController(mock.Object,null);
 
             //Action
             RedirectToRouteResult result = target.AddToCart(cart, 2, "myUrl");
@@ -368,7 +368,7 @@ namespace SportsStore.UnitTests
             //创建Cart
             Cart cart = new Cart();
             //创建控制器
-            CartController target = new CartController(null);
+            CartController target = new CartController(null,null);
             //Action
             //调用Index动作方法
             CartIndexViewModel result = (CartIndexViewModel)target.Index(cart, "myUrl").ViewData.Model;
@@ -376,6 +376,85 @@ namespace SportsStore.UnitTests
             Assert.AreSame(result.Cart, cart);
             Assert.AreEqual(result.ReturnUrl, "myUrl");
 
+        }
+
+        [TestMethod]
+        public void CannotCheckoutEmptyCart()
+        {
+            //Arrange
+            //创建一个模仿的订单处理器 
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            //创建一个空的购物车
+            Cart cart = new Cart();
+            //创建送货细节
+            ShippingDetails shippingDetails = new ShippingDetails();
+            //创建一个控制器实例
+            CartController target = new CartController(null, mock.Object);
+
+            //Action
+            ViewResult result = target.Checkout(cart, shippingDetails);
+
+            //Assert
+            //检查，订单尚未传递给处理器
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Never());
+            //检查，该方法返回的是默认视图
+            Assert.AreEqual("", result.ViewName);
+            //检查，对视图传递一个非法模型
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+        [TestMethod]
+        public void CannotCheckoutInvalidShippingDetails()
+        {
+            //Arrange
+            //创建一个模仿的订单处理器 
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            //创建一个空的购物车
+            Cart cart = new Cart();
+            cart.AddItem(new Product(), 1);
+            //创建一个控制器实例
+            CartController target = new CartController(null, mock.Object);
+            //把一个错误添加到模型
+            target.ModelState.AddModelError("error", "error");
+
+            //Action
+            //试图结算
+            ViewResult result = target.Checkout(cart, new ShippingDetails());
+
+            //Assert
+            //检查，订单尚未传递给处理器
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Never());
+            //检查，该方法返回的是默认视图
+            Assert.AreEqual("", result.ViewName);
+            //检查，对视图传递一个非法模型
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+        [TestMethod]
+        public void CanCheckoutAndSubmitOrder()
+        {
+            //Arrange
+            //创建一个模仿的订单处理器 
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            //创建一个空的购物车
+            Cart cart = new Cart();
+            cart.AddItem(new Product(), 1);
+            //创建一个控制器实例
+            CartController target = new CartController(null, mock.Object);
+            //把一个错误添加到模型
+            target.ModelState.AddModelError("error", "error");
+
+            //Action
+            //试图结算
+            ViewResult result = target.Checkout(cart, new ShippingDetails());
+
+            //Assert
+            //检查，订单已被传递给处理器
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Once());
+            //检查，方法返回的是Completed(已完成)视图
+            Assert.AreEqual("Completed", result.ViewName);
+            //检查，把一个有效的模型传得给视图
+            Assert.AreEqual(true, result.ViewData.ModelState.IsValid);
         }
 
     }

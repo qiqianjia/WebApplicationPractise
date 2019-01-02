@@ -10,18 +10,18 @@ namespace SportsStore.Domain.Entities
     {
         private List<CartLine> _lineCollection = new List<CartLine>();
 
-        public void AddItem(Product P_Product, int P_Quatity)
+        public void AddItem(Product P_Product, int P_Quantity)
         {
             CartLine line = _lineCollection
                 .Where(p => p.Product.ProductID == P_Product.ProductID)
                 .FirstOrDefault();
             if (line == null)
             {
-                _lineCollection.Add(new CartLine { Product = P_Product, Quantity = P_Quatity });
+                _lineCollection.Add(new CartLine { Product = P_Product, Quantity = P_Quantity });
             }
             else
             {
-                line.Quantity += P_Quatity;
+                line.Quantity += P_Quantity;
             }
         }
 

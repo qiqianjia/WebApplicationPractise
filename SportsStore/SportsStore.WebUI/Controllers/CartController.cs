@@ -12,10 +12,19 @@ namespace SportsStore.WebUI.Controllers
     public class CartController : Controller
     {
         private IProductRepository _repository;
+        private IOrderProcessor _orderProcessor;
 
+        /*
         public CartController(IProductRepository P_Repository)
         {
             _repository = P_Repository;
+        }
+        */
+
+        public CartController(IProductRepository P_Repository, IOrderProcessor P_Processor)
+        {
+            _repository = P_Repository;
+            _orderProcessor = P_Processor;
         }
 
         /*//修改程序，使用模型绑定器来获取session中的对象
@@ -85,14 +94,42 @@ namespace SportsStore.WebUI.Controllers
             return View(new CartIndexViewModel {Cart = P_Cart, ReturnUrl = ReturnUrl});
         }
 
+        /*
         public PartialViewResult Summary(Cart P_Cart)
         {
             return PartialView(P_Cart);
         }
+        */
 
         public ViewResult Checkout()
         {
             return View(new ShippingDetails());
         }
+
+        public ViewResult Summary(Cart P_Cart)
+        {
+            return View(P_Cart);
+        }
+
+        [HttpPost]
+        public ViewResult Checkout(Cart P_Cart, ShippingDetails P_ShippingDetails)
+        {
+            if (P_Cart.Lines.Count() == 0)
+            {
+                ModelState.AddModelError("", "Sorry, your cart is empty!");
+            }
+            if (ModelState.IsValid)
+            {
+                _orderProcessor.ProcessOrder(P_Cart, P_ShippingDetails);
+                P_Cart.Clear();
+                return View("Completed");
+            }
+            else
+            {
+                return View(P_ShippingDetails);
+            }
+        }
+
+
     }
 }
