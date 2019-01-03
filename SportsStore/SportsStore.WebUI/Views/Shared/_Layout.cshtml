@@ -51,7 +51,8 @@
 </head>
 <body>
     <div id="header">
-        @{Html.RenderAction("Summary", "Cart"); }
+        @*这里在Cart控制器的Summary分部视图中，发生了死循环，无法进行到下一步，暂时注释掉，待查原因，20190103*@
+        @*@{Html.RenderAction("Summary", "Cart"); }*@
         <div class="title">SPORTS STORE</div>
     </div>
     <div id="categories">
