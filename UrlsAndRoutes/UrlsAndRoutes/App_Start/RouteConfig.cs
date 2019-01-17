@@ -29,8 +29,30 @@ namespace UrlsAndRoutes
             routes.Add("MyRoute", myRoute);
             */
 
+            /*
+            routes.MapRoute("ShopSchema", "Shop/OldAction"
+                , new { contoller = "Home", action = "Index" });
+
+            routes.MapRoute("ShopSchema", "Shop/{action}"
+                , new { controller = "Home" });
+
+            routes.MapRoute("", "X{controller}/{action}");
+
             routes.MapRoute("MyRoute", "{controller}/{action}"
                 ,new { controller="Home",action="Index"});
+
+            routes.MapRoute("","Public/{controller}/{action}"
+                ,new { controller="Home",action="Index"});
+                
+             */
+
+            /*
+            routes.MapRoute("MyRoute", "{controller}/{action}/{id}"
+                , new { controller = "Home", action = "Index", id = "DefaultId" });
+             */
+
+            routes.MapRoute("MyRoute", "{controller}/{action}/{id}"
+                ,new { controller="Home",action="Index",id=UrlParameter.Optional}); 
 
         }
     }

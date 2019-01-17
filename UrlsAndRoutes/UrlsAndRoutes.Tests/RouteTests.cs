@@ -97,10 +97,19 @@ namespace UrlsAndRoutes.Tests
             TestRouteFail("~/Admin/Index/Segment");
             TestRouteFail("~/Admin");
 
+            /*
+            TestRouteMatch("~/", "Home", "Index",new { id="DefaultId"});
+            TestRouteMatch("~/Customer", "Customer", "Index",new { id="DefaultId"});
+            TestRouteMatch("~/Shop/Index", "Home", "Index", new { id = "DefaultId" });
+            TestRouteMatch("~/Customer/List", "Customer", "List", new { id = "DefaultId" });
+            TestRouteFail("~/Customer/List/All");
+             */
+
             TestRouteMatch("~/", "Home", "Index");
             TestRouteMatch("~/Customer", "Customer", "Index");
             TestRouteMatch("~/Customer/List", "Customer", "List");
-            TestRouteFail("~/Customer/List/All");
+            TestRouteMatch("~/Customer/List/All", "Customer", "List", new { id = "All" });
+            TestRouteFail("~/Customer/List/All/Delete");
         }
     }
 }
