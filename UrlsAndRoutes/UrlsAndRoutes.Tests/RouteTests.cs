@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Routing;
 using Moq;
 using System.Reflection;
+using System.Web.Mvc;
 
 namespace UrlsAndRoutes.Tests
 {
@@ -124,6 +125,7 @@ namespace UrlsAndRoutes.Tests
                 new { id = "All", catchall = "Delete/Perm" });
                 */
 
+            /*
             TestRouteMatch("~/", "Home", "Index");
             TestRouteMatch("~/Home", "Home", "Index");
             TestRouteMatch("~/Home/Index", "Home", "Index");
@@ -135,7 +137,24 @@ namespace UrlsAndRoutes.Tests
             TestRouteFail("~/Home/OtherAction");
             TestRouteFail("~/Account/Index");
             TestRouteFail("~/Account/About");
-
+            */
         }
+
+        [TestMethod]
+        public void TestOutgoingRoutes()
+        {
+            //Arrange
+            RouteCollection routes = new RouteCollection();
+            RouteConfig.RegisterRoutes(routes);
+            RequestContext context = new RequestContext(CreateHttpContext(), new RouteData());
+
+            //Action
+            //生成URL
+            string result = UrlHelper.GenerateUrl(null,"Index","Home",null,routes,context,true);
+
+            //Assert
+            Assert.AreEqual("/App/DoIndex", result);
+        }
+
     }
 }
