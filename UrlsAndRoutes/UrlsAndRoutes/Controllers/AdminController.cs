@@ -15,5 +15,13 @@ namespace UrlsAndRoutes.Controllers
             ViewBag.Action = "Index";
             return View("ActionName");
         }
+
+        public ActionResult OutgoingUrlRedirect()
+        {
+            ViewBag.Controller = "Admin";
+            ViewBag.Action = "OutgoingUrlRedirect";
+            return View("ActionName");
+        }
+
     }
 }
