@@ -34,13 +34,26 @@
         </div>*@
 
     @*<div>
-        @Html.ActionLink("This is an outgoing URL", "Index", "Home"
-       ,"https","myserver.mydomain.com"," myFragmentName"
-       , new { id="MyID"},new { id = "myAnchorID", @class = "myCssClass" })
-    </div>*@
+            @Html.ActionLink("This is an outgoing URL", "Index", "Home"
+           ,"https","myserver.mydomain.com"," myFragmentName"
+           , new { id="MyID"},new { id = "myAnchorID", @class = "myCssClass" })
+        </div>*@
 
+    @*<div>
+            This is a URL: @Url.Action("Index","Home",new { id="MyID"})
+        </div>*@
+
+    @*<div>
+            @Html.RouteLink("Click me", "MyOtherRoute", "Index", "Customer")
+        </div>*@
+
+    @*<div>
+            This is a URL: @Url.Action("Index", "Home", new { id = "MyID" })
+        </div>*@
+    
     <div>
-        This is a URL: @Url.Action("Index","Home",new { id="MyID"})
+        This is a URL: @Html.ActionLink("Click me","GetLegacyURL"
+                      , new { P_LegacyURL= "~/articles/Windows_3._Overview.html" })
     </div>
 
 </body>

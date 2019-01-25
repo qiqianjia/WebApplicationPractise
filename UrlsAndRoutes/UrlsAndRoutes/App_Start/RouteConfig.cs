@@ -127,13 +127,23 @@ namespace UrlsAndRoutes
                 , new { controller = "Home" });
             */
 
-
+            /*
             routes.MapRoute("MyRoute", "{controller}/{action}/{id}"
                 , new { controller = "Home", action = "Index", id = UrlParameter.Optional }
                 );
-            
+            */
+
             //routes.MapRoute("MyRoute", "{controller}/{action}/{color}/{page}");
 
+            routes.Add(new Route("SayHello", new CustomRouteHandler()));
+
+            routes.Add(new LegacyRoute(
+                "~/articles/Windows_3._Overview.html"
+                , "~/old/.NET_1.0_Class_Library"
+                ));
+
+            routes.MapRoute("MyRoute", "{controller}/{action}");
+            routes.MapRoute("MyOtherRoute", "App/{action}", new { controller = "Home" });
 
         }
     }
