@@ -9,7 +9,7 @@ namespace ControllersAndActions.Controllers
     public class ExampleController : Controller
     {
         // GET: Example
-        public ActionResult Index()
+        public ViewResult Index()
         {
             return View("Homepage");
         }

@@ -19,7 +19,7 @@ namespace ControllersAndActions.Tests
             ViewResult result = target.Index();
             //Assert
             //检查结果
-
+            Assert.AreEqual("Homepage", result.ViewName);
         }
     }
 }
